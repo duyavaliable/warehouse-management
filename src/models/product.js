@@ -144,8 +144,9 @@ class Product {
                     SELECT p.*, c.category_name 
                     FROM products p
                     LEFT JOIN categories c ON p.category_id = c.category_id
-                    // WHERE p.current_stock > p.min_stock_level
-                    WHERE p.stock_quantity > p.min_stock_level
+                    LEFT JOIN inventory i ON p.product_id = i.product_id
+                    WHERE i.current_stock > p.min_stock_level
+                    
                 `;
             } else if (status === 'outofstock') {
                 // Sản phẩm có tồn kho nhỏ hơn hoặc bằng mức tối thiểu
@@ -153,8 +154,8 @@ class Product {
                     SELECT p.*, c.category_name 
                     FROM products p
                     LEFT JOIN categories c ON p.category_id = c.category_id
-                    // WHERE p.current_stock <= p.min_stock_level
-                    WHERE p.stock_quantity <= p.min_stock_level
+                    LEFT JOIN inventory i ON p.product_id = i.product_id
+                    WHERE i.current_stock <= p.min_stock_level
                 `;
             }
             return await query(sql);
